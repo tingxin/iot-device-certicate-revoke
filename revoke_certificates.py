@@ -3,7 +3,7 @@ import OpenSSL
 
 ## 需要修改
 dynamodb_crl_series_number_trace = 'crl_series_number_trace'
-
+####
 iot = boto3.client('iot')
 dynamodb = boto3.client('dynamodb')
 
