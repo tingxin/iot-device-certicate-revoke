@@ -4,10 +4,11 @@ import OpenSSL
 ## 需要修改
 dynamodb_crl_series_number_trace = 'crl_series_number_trace'
 
-def handler(event, context):
-    iot = boto3.client('iot')
-    dynamodb = boto3.client('dynamodb')
+iot = boto3.client('iot')
+dynamodb = boto3.client('dynamodb')
 
+
+def handler(event, context):
     for record in event['Records']:
         if 'body' not in record:
             continue
@@ -32,10 +33,11 @@ def handler(event, context):
             print(f'{certificate_id}:{serial_number}')
 
             rp = dynamodb.get_item(TableName=dynamodb_crl_series_number_trace,
-                Key={
-                    'series_number': {'S':serial_number}
-                }
-            if 'Item' not in rp:
+                                   Key={
+                                       'series_number': {'S': str(serial_number)}
+                                   }
+                                )
+            if "Item" not in rp:
                 continue
 
             response = iot.update_certificate(
@@ -44,5 +46,5 @@ def handler(event, context):
             )
             print(response)
 
-            
-    
+
+
